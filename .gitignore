@@ -1,0 +1,4 @@
+uploads/*
+.env
+todo-app
+todo-app.*
