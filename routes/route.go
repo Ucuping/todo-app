@@ -24,11 +24,5 @@ func Route(app *fiber.App) {
 		RoleRoute(router)
 		TodoRoute(router)
 		UserRoute(router)
-
-		router.Get("users", func(c *fiber.Ctx) error {
-			return c.JSON(fiber.Map{
-				"status": "success",
-			})
-		})
 	})
 }
