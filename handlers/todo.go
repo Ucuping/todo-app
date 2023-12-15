@@ -1,13 +1,12 @@
 package handlers
 
 import (
-	"strconv"
-
 	"github.com/Ucuping/todo-app/models"
 	"github.com/Ucuping/todo-app/pkg/validator"
 	"github.com/Ucuping/todo-app/repositories"
 	"github.com/Ucuping/todo-app/request"
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 	"github.com/morkid/paginate"
 )
 
@@ -58,9 +57,9 @@ func (h *handlerTodo) CreateTodo(c *fiber.Ctx) error {
 }
 
 func (h *handlerTodo) GetTodo(c *fiber.Ctx) error {
-	id, _ := strconv.Atoi(c.Params("id"))
+	id := uuid.MustParse(c.Params("id"))
 
-	todo, err := h.TodoRepository.GetTodo(uint(id))
+	todo, err := h.TodoRepository.GetTodo(id)
 
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(errorResponse{Status: "fail", Message: "Todo not found"})
@@ -76,9 +75,9 @@ func (h *handlerTodo) UpdateTodo(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(errorResponse{Status: "fail", Message: "Internal Server Error"})
 	}
 
-	id, _ := strconv.Atoi(c.Params("id"))
+	id := uuid.MustParse(c.Params("id"))
 
-	todo, err := h.TodoRepository.GetTodo(uint(id))
+	todo, err := h.TodoRepository.GetTodo(id)
 
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(errorResponse{Status: "fail", Message: "Todo not found"})
@@ -96,15 +95,15 @@ func (h *handlerTodo) UpdateTodo(c *fiber.Ctx) error {
 }
 
 func (h *handlerTodo) DeleteTodo(c *fiber.Ctx) error {
-	id, _ := strconv.Atoi(c.Params("id"))
+	id := uuid.MustParse(c.Params("id"))
 
-	todo, err := h.TodoRepository.GetTodo(uint(id))
+	todo, err := h.TodoRepository.GetTodo(id)
 
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(errorResponse{Status: "fail", Message: "Todo not found"})
 	}
 
-	data, err := h.TodoRepository.DeleteTodo(uint(id), todo)
+	data, err := h.TodoRepository.DeleteTodo(id, todo)
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(errorResponse{Status: "fail", Message: "Internal Server Error"})

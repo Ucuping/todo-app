@@ -1,13 +1,12 @@
 package handlers
 
 import (
-	"strconv"
-
 	"github.com/Ucuping/todo-app/models"
 	"github.com/Ucuping/todo-app/pkg/validator"
 	"github.com/Ucuping/todo-app/repositories"
 	"github.com/Ucuping/todo-app/request"
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 	"github.com/morkid/paginate"
 )
 
@@ -67,7 +66,7 @@ func (h *handlerRole) CreateRole(c *fiber.Ctx) error {
 }
 
 func (h *handlerRole) GetRole(c *fiber.Ctx) error {
-	id, _ := strconv.Atoi(c.Params("id"))
+	id := uuid.MustParse(c.Params("id"))
 
 	role, err := h.RoleRepository.GetRole(id)
 
@@ -94,7 +93,7 @@ func (h *handlerRole) UpdateRole(c *fiber.Ctx) error {
 		})
 	}
 
-	id, _ := strconv.Atoi(c.Params("id"))
+	id := uuid.MustParse(c.Params("id"))
 
 	role, err := h.RoleRepository.GetRole(id)
 
@@ -123,7 +122,7 @@ func (h *handlerRole) UpdateRole(c *fiber.Ctx) error {
 }
 
 func (h *handlerRole) DeleteRole(c *fiber.Ctx) error {
-	id, _ := strconv.Atoi(c.Params("id"))
+	id := uuid.MustParse(c.Params("id"))
 
 	role, err := h.RoleRepository.GetRole(id)
 
@@ -176,7 +175,7 @@ func (h *handlerRole) ChangePermission(c *fiber.Ctx) error {
 		})
 	}
 
-	id, _ := strconv.Atoi(c.Params("id"))
+	id := uuid.MustParse(c.Params("id"))
 
 	role, err := h.RoleRepository.GetRole(id)
 

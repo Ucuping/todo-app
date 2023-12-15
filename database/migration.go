@@ -8,7 +8,20 @@ import (
 )
 
 func MigrateTable() {
-	err := mysql.DB.AutoMigrate(
+	err := mysql.DB.Migrator().DropTable(
+		&models.Permission{},
+		&models.Role{},
+		&models.RoleHasPermission{},
+		&models.User{},
+		&models.UserHasRole{},
+		&models.Todo{},
+	)
+	if err != nil {
+		fmt.Println(err)
+		panic("Drop table failed")
+	}
+
+	err = mysql.DB.AutoMigrate(
 		&models.User{},
 		// &models.RoleHasPermission{},
 		&models.Permission{},

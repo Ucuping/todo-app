@@ -1,9 +1,14 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
 
 type User struct {
-	ID        uint      `gorm:"primaryKey" json:"id"`
+	ID        uuid.UUID `gorm:"primaryKey" json:"id"`
 	Name      string    `gorm:"size:100;not null" json:"name"`
 	Email     string    `gorm:"size:30;unique" json:"email"`
 	Username  string    `gorm:"size:50;not null;unique" json:"username"`
@@ -13,4 +18,10 @@ type User struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 	Roles     []*Role   `gorm:"many2many:user_has_roles;" json:"roles"`
+}
+
+func (user *User) BeforeCreate(scope *gorm.DB) error {
+	newUuid := uuid.NewString()
+	scope.Statement.SetColumn("ID", newUuid)
+	return nil
 }

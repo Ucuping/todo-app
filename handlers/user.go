@@ -3,7 +3,6 @@ package handlers
 import (
 	"fmt"
 	"os"
-	"strconv"
 
 	"github.com/Ucuping/todo-app/models"
 	"github.com/Ucuping/todo-app/pkg/bcrypt"
@@ -11,6 +10,7 @@ import (
 	"github.com/Ucuping/todo-app/repositories"
 	"github.com/Ucuping/todo-app/request"
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 	"github.com/morkid/paginate"
 )
 
@@ -85,7 +85,7 @@ func (h *handlerUser) CreateUser(c *fiber.Ctx) error {
 }
 
 func (h *handlerUser) GetUser(c *fiber.Ctx) error {
-	id, _ := strconv.Atoi(c.Params("id"))
+	id := uuid.MustParse(c.Params("id"))
 
 	user, err := h.UserRepository.GetUser(id)
 
@@ -113,7 +113,7 @@ func (h *handlerUser) UpdateUser(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(errorResponse{Status: "error", Message: "Internal Server Error"})
 	}
 
-	id, _ := strconv.Atoi(c.Params("id"))
+	id := uuid.MustParse(c.Params("id"))
 
 	user, err := h.UserRepository.GetUser(id)
 
@@ -185,7 +185,7 @@ func (h *handlerUser) UpdateUser(c *fiber.Ctx) error {
 }
 
 func (h *handlerUser) DeleteUser(c *fiber.Ctx) error {
-	id, _ := strconv.Atoi(c.Params("id"))
+	id := uuid.MustParse(c.Params("id"))
 
 	user, err := h.UserRepository.GetUser(id)
 
@@ -203,7 +203,7 @@ func (h *handlerUser) DeleteUser(c *fiber.Ctx) error {
 }
 
 func (h *handlerUser) SetActiveUser(c *fiber.Ctx) error {
-	id, _ := strconv.Atoi(c.Params("id"))
+	id := uuid.MustParse(c.Params("id"))
 
 	user, err := h.UserRepository.GetUser(id)
 

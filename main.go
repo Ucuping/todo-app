@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/Ucuping/todo-app/database"
+	"github.com/Ucuping/todo-app/database/seeders"
 	"github.com/Ucuping/todo-app/pkg/mysql"
 	"github.com/Ucuping/todo-app/routes"
 	"github.com/gofiber/fiber/v2"
@@ -18,6 +19,7 @@ func init() {
 
 	mysql.DatabaseInit()
 	database.MigrateTable()
+	seeders.Seeder()
 }
 
 func main() {

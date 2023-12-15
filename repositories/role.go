@@ -2,18 +2,19 @@ package repositories
 
 import (
 	"github.com/Ucuping/todo-app/models"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type RoleRepository interface {
 	GetAllRole() (*gorm.DB, []models.Role)
 	CreateRole(role models.Role) (models.Role, error)
-	GetRole(ID int) (models.Role, error)
+	GetRole(ID uuid.UUID) (models.Role, error)
 	UpdateRole(role models.Role) (models.Role, error)
-	DeleteRole(ID int, role models.Role) (models.Role, error)
+	DeleteRole(ID uuid.UUID, role models.Role) (models.Role, error)
 	GetAllPermission() ([]models.Permission, error)
-	ChangePermission(roleHasPermissions []models.RoleHasPermission, RoleID int) (models.Role, error)
-	CheckPermission(ID uint) error
+	ChangePermission(roleHasPermissions []models.RoleHasPermission, RoleID uuid.UUID) (models.Role, error)
+	CheckPermission(ID uuid.UUID) error
 }
 
 func RepositoryRole(db *gorm.DB) *repository {
@@ -23,7 +24,7 @@ func RepositoryRole(db *gorm.DB) *repository {
 func (r *repository) GetAllRole() (*gorm.DB, []models.Role) {
 	// var role models.Role
 
-	model := r.db.Preload("Permissions").Model(&models.Role{}).Where("name != ?", "Dev")
+	model := r.db.Preload("Permissions").Model(&models.Role{}).Where("name != ?", "Developer")
 
 	return model, []models.Role{}
 }
@@ -33,7 +34,7 @@ func (r *repository) CreateRole(role models.Role) (models.Role, error) {
 	return role, err
 }
 
-func (r *repository) GetRole(ID int) (models.Role, error) {
+func (r *repository) GetRole(ID uuid.UUID) (models.Role, error) {
 	var role models.Role
 	err := r.db.First(&role, ID).Error
 	return role, err
@@ -44,7 +45,7 @@ func (r *repository) UpdateRole(role models.Role) (models.Role, error) {
 	return role, err
 }
 
-func (r *repository) DeleteRole(ID int, role models.Role) (models.Role, error) {
+func (r *repository) DeleteRole(ID uuid.UUID, role models.Role) (models.Role, error) {
 	err := r.db.Delete(&role, ID).Scan(&role).Error
 	return role, err
 }
@@ -57,7 +58,7 @@ func (r *repository) GetAllPermission() ([]models.Permission, error) {
 	return permissions, err
 }
 
-func (r *repository) ChangePermission(roleHasPermissions []models.RoleHasPermission, RoleID int) (models.Role, error) {
+func (r *repository) ChangePermission(roleHasPermissions []models.RoleHasPermission, RoleID uuid.UUID) (models.Role, error) {
 	var err error
 	var rhp models.RoleHasPermission
 	var role models.Role
@@ -77,7 +78,7 @@ func (r *repository) ChangePermission(roleHasPermissions []models.RoleHasPermiss
 	return role, err
 }
 
-func (r *repository) CheckPermission(ID uint) error {
+func (r *repository) CheckPermission(ID uuid.UUID) error {
 	var permission models.Permission
 	err := r.db.First(&permission, ID).Error
 
